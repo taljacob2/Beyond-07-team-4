@@ -1,10 +1,24 @@
+from django.contrib.auth.models import User
 from django.db import models
+
+from .chat import Chat
 
 
 class Message(models.Model):
-    # chat_id  # TODO: Add later.
-    # author_id  # TODO: Add later.
-    date_posted = models.DateTimeField(auto_now_add=True)
+    chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, blank=True, null=True)
+
+    # TODO:
+    """
+    Consult with Omer:
+    That on COMMENT and POST, the FK to the author should be:
+    
+    ```
+    author = models.ForeignKey(User, blank=True, null=True)
+    ```
+    """
+    date_posted = models.DateTimeField(
+        auto_now_add=True)  # TODO: Change to: `models.DateTimeField(default=timezone.now)`
     content = models.TextField()
 
     def __str__(self):
