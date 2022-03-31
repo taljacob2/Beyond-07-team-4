@@ -6,7 +6,7 @@ from .chat import Chat
 
 class Message(models.Model):
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
-    author = models.ForeignKey(User, blank=True, null=True)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
     # TODO:
     """
@@ -14,7 +14,7 @@ class Message(models.Model):
     That on COMMENT and POST, the FK to the author should be:
     
     ```
-    author = models.ForeignKey(User, blank=True, null=True)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     ```
     """
     date_posted = models.DateTimeField(
