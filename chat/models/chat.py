@@ -3,8 +3,7 @@ from django.db import models
 
 
 class Chat(models.Model):
-    users = models.ManyToManyField(User, related_name="users", blank=True,
-                                   null=True)
+    users = models.ManyToManyField(User, related_name="users")
 
     def __str__(self):
         return str(self.id)
