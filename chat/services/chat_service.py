@@ -25,3 +25,17 @@ class ChatService:
 
     def get_chats_of_user_by_username(self, username):
         self.get_chats_of_user(User.object.filter(username=username).first())
+
+    def insert_chat_with_users_by_usernames(self, usernames_to_insert):
+        chat_record = Chat.objects.create()
+        """
+        Map all usernames in the `chat_record`, to their corresponding
+        `User` records.
+        """
+        users_to_insert = [User.objects.filter(username=username).first() for
+                           username in usernames_to_insert]
+        chat_record.users.set(users_to_insert)
+
+    def insert_chat_with_users(self, users_to_insert):
+        chat_record = Chat.objects.create()
+        chat_record.users.set(users_to_insert)

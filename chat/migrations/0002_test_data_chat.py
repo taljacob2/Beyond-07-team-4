@@ -1,8 +1,8 @@
 import django.contrib.auth
 from django.db import migrations, transaction
 
-from chat.models import Chat
 from chat.resources.chats import CHATS
+from chat.services.chat_service import ChatService
 
 User = django.contrib.auth.get_user_model()
 
@@ -15,15 +15,9 @@ class Migration(migrations.Migration):
 
     def generate_chat_records(apps, schema_editor):
         with transaction.atomic():
+            chat_service = ChatService()
             for chat in CHATS:
-                chat_record = Chat.objects.create()
-                """
-                Map all usernames in the `chat_record`, to their corresponding
-                `User` records.
-                """
-                users = [User.objects.filter(username=username).first() for
-                         username in chat]
-                chat_record.users.set(users)
+                chat_service.insert_chat_with_users_by_usernames(chat)
 
     operations = [
         migrations.RunPython(generate_chat_records),
