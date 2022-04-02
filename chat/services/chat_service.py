@@ -7,7 +7,7 @@ User = django.contrib.auth.get_user_model()
 
 class ChatService:
     def add_message(self, source_chat, message_author, message_content):
-        Message.objects.create(
+        return Message.objects.create(
             chat=source_chat,
             author=message_author,
             content=message_content
@@ -24,7 +24,7 @@ class ChatService:
         return filter(is_user_in_chat, chats.iterator())
 
     def get_chats_of_user_by_username(self, username):
-        self.get_chats_of_user(User.object.filter(username=username).first())
+        self.get_chats_of_user(User.objects.filter(username=username).first())
 
     def insert_chat_with_users_by_usernames(self, usernames_to_insert):
         chat_record = Chat.objects.create()
@@ -35,7 +35,9 @@ class ChatService:
         users_to_insert = [User.objects.filter(username=username).first() for
                            username in usernames_to_insert]
         chat_record.users.set(users_to_insert)
+        return chat_record
 
     def insert_chat_with_users(self, users_to_insert):
         chat_record = Chat.objects.create()
         chat_record.users.set(users_to_insert)
+        return chat_record
