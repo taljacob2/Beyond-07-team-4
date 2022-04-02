@@ -1,7 +1,7 @@
 import django.contrib.auth
 from django.db import migrations, transaction
 
-from chat.models import *
+from chat.models import Chat, Message
 
 User = django.contrib.auth.get_user_model()
 
@@ -14,15 +14,15 @@ class Migration(migrations.Migration):
     def generate_chat_message_records(apps, schema_editor):
         with transaction.atomic():
             """
-            For each chat record, the first user in the chat shout-outs a 
-            message. Afterwards, every other user in the chat responds with a 
+            For each chat record, the first user in the chat shout-outs a
+            message. Afterwards, every other user in the chat responds with a
             message.
             """
 
             # First user shout-outs a message.
             chats = Chat.objects.all()
             for chat_record in chats.iterator():
-                message_record = Message.objects.create(
+                Message.objects.create(
                     chat=chat_record,
                     author=chat_record.users.first(),
                     content='Hey! Is anybody here?'
@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
                     user_index += 1
                     if user_index == 0:
                         continue
-                    message_record = Message.objects.create(
+                    Message.objects.create(
                         chat=chat_record,
                         author=user_record,
                         content='I am here!'

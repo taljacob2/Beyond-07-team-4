@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
             for chat in CHATS:
                 chat_record = Chat.objects.create()
                 """
-                Map all usernames in the `chat_record`, to their corresponding 
+                Map all usernames in the `chat_record`, to their corresponding
                 `User` records.
                 """
                 users = [User.objects.filter(username=username).first() for
