@@ -7,17 +7,7 @@ from .chat import Chat
 
 class Message(models.Model):
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
-    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-
-    # TODO:
-    """
-    Consult with Omer:
-    That on COMMENT and POST, the FK to the author should be:
-    
-    ```
-    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    ```
-    """
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     date_posted = models.DateTimeField(default=timezone.now)
     content = models.TextField()
 
