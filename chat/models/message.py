@@ -23,10 +23,15 @@ class Message(models.Model):
 
     def __str__(self):
         """
-        :return: First characters in the `content` string.
-        In case `content` is `None`, return `self.id` instead.
+        :return: First characters in the `self.content` string.
+        In case `self.content` is `None`, return `self.id` instead.
         """
+        character_limit_to_present = 40
+
         if self.content is not None:
-            return str(f'{self.content[0:40]}...')
+            return str(
+                f'{self.content[0:character_limit_to_present]}...') if len(
+                self.content) > character_limit_to_present else str(
+                self.content)
         else:
             return self.id
