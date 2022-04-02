@@ -20,17 +20,26 @@ class Migration(migrations.Migration):
             message. Afterwards, every other user in the chat responds with a 
             message.
             """
-            for chat_record in chats.iterator():
-                message_record = Message.objects.create()
-                message_record.chat = chat_record
-                message_record.author = chat_record.users.first()
-                message_record.content = 'Hey! Is anybody here?'
 
-                for user_index in range(1, len(chat_record.users.iterator())):
-                    message_record = Message.objects.create()
-                    message_record.chat = chat_record
-                    message_record.author = chat_record.users[user_index]
-                    message_record.content = 'I am here!'
+            # First user shout-outs a message.
+            for chat_record in chats.iterator():
+                message_record = Message.objects.create(
+                    chat=chat_record,
+                    author=chat_record.users.first(),
+                    content='Hey! Is anybody here?'
+                ).save()
+
+                # Every other user in the chat responds with a message.
+                user_index = 0
+                for user_record in chat_record.users.iterator():
+                    if user_index == 0:
+                        continue
+                    message_record = Message.objects.create(
+                        chat=chat_record,
+                        author=user_record,
+                        content='I am here!'
+                    ).save()
+                    user_index += 1
 
     operations = [
         migrations.RunPython(generate_chat_message_records),

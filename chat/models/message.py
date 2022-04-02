@@ -29,9 +29,11 @@ class Message(models.Model):
         character_limit_to_present = 40
 
         if self.content is not None:
-            return str(
+            content_str = str(
                 f'{self.content[0:character_limit_to_present]}...') if len(
                 self.content) > character_limit_to_present else str(
                 self.content)
+            username = self.author.username if self.author is not None else 'Deleted User'
+            return f'{username}: {content_str}'
         else:
             return self.id
