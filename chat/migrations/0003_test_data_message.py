@@ -13,8 +13,6 @@ class Migration(migrations.Migration):
 
     def generate_chat_message_records(apps, schema_editor):
         with transaction.atomic():
-            chats = Chat.objects.all()
-
             """
             For each chat record, the first user in the chat shout-outs a 
             message. Afterwards, every other user in the chat responds with a 
@@ -22,6 +20,7 @@ class Migration(migrations.Migration):
             """
 
             # First user shout-outs a message.
+            chats = Chat.objects.all()
             for chat_record in chats.iterator():
                 message_record = Message.objects.create(
                     chat=chat_record,
@@ -30,8 +29,9 @@ class Migration(migrations.Migration):
                 ).save()
 
                 # Every other user in the chat responds with a message.
-                user_index = 0
+                user_index = -1
                 for user_record in chat_record.users.iterator():
+                    user_index += 1
                     if user_index == 0:
                         continue
                     message_record = Message.objects.create(
@@ -39,7 +39,6 @@ class Migration(migrations.Migration):
                         author=user_record,
                         content='I am here!'
                     ).save()
-                    user_index += 1
 
     operations = [
         migrations.RunPython(generate_chat_message_records),
