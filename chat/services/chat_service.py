@@ -18,13 +18,14 @@ class ChatService:
 
     def get_chats_of_user(self, user):
         def is_user_in_chat(chat):
-            return user in chat.users
+            return user in chat.users.iterator()
 
         chats = Chat.objects.all()
         return filter(is_user_in_chat, chats.iterator())
 
     def get_chats_of_user_by_username(self, username):
-        self.get_chats_of_user(User.objects.filter(username=username).first())
+        return self.get_chats_of_user(User.objects.filter(
+            username=username).first())
 
     def insert_chat_with_users_by_usernames(self, usernames_to_insert):
         chat_record = Chat.objects.create()
