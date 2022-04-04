@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'job_board.apps.JobBoardConfig',
     'feed.apps.FeedConfig',
     'personal_profile.apps.PersonalProfileConfig',
+    'chat.apps.ChatConfig',
 ]
 
 MIDDLEWARE = [
